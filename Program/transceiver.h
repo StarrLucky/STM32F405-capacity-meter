@@ -1,7 +1,7 @@
 #ifndef _TRAN_H
 #define _TRAN_H
 
-#define PACKETSIZE 30      //expected of known size of the packet which consists data + headers
+#define PACKETSIZE 30      //expected or known size of the packet which consists data + headers
 
 uint8_t sendcharUART(uint8_t *ch, uint16_t cnt);
 void ftoa(float f, char *str);
