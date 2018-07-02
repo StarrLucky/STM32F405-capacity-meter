@@ -70,10 +70,11 @@ LED1 = GPIO_PIN_9;
 uint32_t ADCres;
 float capacity;
 volatile uint32_t ADCDATA[15];
-uint8_t receiveBufferUART5[32];
+
 	float f = 1000;
-char buf1[32];
-char USART_chars_buffer[32]; uint16_t uscnt;
+char buf1[13];
+char USART_chars_buffer[13]; uint16_t uscnt;
+volatile uint8_t USART5newData;
 #endif
 /* USER CODE END Includes */
 
@@ -134,11 +135,12 @@ int main(void)
 	//HAL_TIM_Base_Start_IT(&htim3);   //Preryvanie po taymery
  	HAL_GPIO_WritePin(GPIOB, LED0, GPIO_PIN_SET);  
 	HAL_GPIO_WritePin(GPIOB, LED1, GPIO_PIN_RESET); 
-	setup();
-	
-	HAL_UART_Receive_IT(&huart5, receiveBufferUART5, 32);
+	meter_setup();  transceiver_setup();
 	
 	
+	HAL_UART_Receive_IT(&huart5,(uint8_t*)us5.receiveBufferUART5HAL,1);
+	
+	 
 	
 	//HAL_TIM_Base_Start_DMA(&htim5, (uint32_t*) ADCDATA, 4);
 	//HAL_TIM_Base_Start(&htim5);
@@ -150,26 +152,31 @@ int main(void)
   while (1)
   {
 		
-	capacity =0;	
+	//capacity =0;	
+		
 	HAL_Delay(1000);
 		
-
-capacity = GetCapacity2();
-		
+      
+	capacity = GetCapacity2();
+		   
 	
-	
+   
 
-	
 
-snprintf(buf1, sizeof buf1, "%f", capacity);  // float to char.
-
-	for (int uscnt = 0; uscnt < sizeof(buf1); uscnt++)   //not brilliant realization) Counting num of chars symbols after conversion from float to char[].
+	snprintf(buf1, 10, "%f", capacity);  // float to char.
+	for (uscnt = 0; uscnt < sizeof(buf1); uscnt++)   //not brilliant realization) Counting num of chars symbols after conversion from float to char[].
 		{
 	if (buf1[uscnt] == 0x00) { break; }	
 		}
+		
 	
-		sendcharUART();	
+     HAL_Delay(500);
+
+
+
 	
+		sendcharUART((uint8_t *)buf1,uscnt);	
+		//recieverUART();
 		
 	//capacity = GetCapacity() ;
 	//capacity = GetCapacity2()

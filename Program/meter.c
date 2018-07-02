@@ -4,6 +4,7 @@
 #include "dma.h"
 #include "tim.h"
 #include "string.h"
+
  
 
 float MAX_CAP_CAPACITY_T;
@@ -16,9 +17,12 @@ uint32_t startTime, elapsedTime, cnt2;
 float XXX;
 float op_time;
 struct cap CAP;
-void setup(void) {
+void meter_setup(void) {
 	MAX_CAP_CAPACITY_T = MAX_CAP_CAPACITY * RESISTOR_VALUE; 
 	MAX_CAP_CAPACITY_T_inTicks =  (tim_clock-1)*MAX_CAP_CAPACITY_T ;
+	
+	
+
 	
 	
 
@@ -50,9 +54,9 @@ Loop and do it again
 float GetCapacity2(void) {
 
 		HAL_ADC_Start_DMA(&hadc3, (uint32_t*)CAP.adcdata, 10);
-			
+			      
 	//	if (CheckConnection() == 0) { HAL_ADC_Stop_DMA(&hadc3);
-	//	return 999; }
+//		return 999; }
 	
 	
 		CAP.adcdata[10] = 0; CAP.adcdata[1] = 0; CAP.adcdata[2] = 0; CAP.adcdata[3] = 0; CAP.adcdata[4] = 0; CAP.adcdata[5] = 0; CAP.adcdata[6] = 0; CAP.adcdata[7] = 0;
@@ -68,16 +72,16 @@ float GetCapacity2(void) {
 		*DWT_CONTROL = *DWT_CONTROL | 1 ;			// enable cycle counter
 	
 		CAP_CHARGER(CHARGE);
+		   
 		
-		
-		while(CAP.adcdata[0]<CAPCHARGED)		// waiting for cap to be charged 
-		{	
+		while(CAP.adcdata[0]<CAPCHARGED)		// waiting for cap to be charged          // sdelat trigger that would be set inside dma interrupt when  adc val =CAPCHARGED
+		{	                                                                           // or use opamp. when U is = CAPCHARGED,  it till trigger ext. interrupt pin which woul mean that cap is charged.
 		}
 		
 		elapsedTime=*DWT_CYCCNT-startTime;	
 		op_time= (elapsedTime)/tim_clock;// count/F_CPU
 	  CAP.capacity = ((op_time)/RESISTOR_VALUE) *1000000.0;  			// uF  
-		
+	 __enable_irq(); 
 		CAP_CHARGER(DISCHARGE);
 		HAL_ADC_Stop_DMA(&hadc3);
 		
@@ -113,7 +117,8 @@ void CAP_CHARGER(int state)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(charge_GPIO_Port, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(charge_GPIO_Port, charge_Pin, GPIO_PIN_SET);
-		
+	 
+	__disable_irq(); 	
 	startTime= *DWT_CYCCNT;
 		}
 	
@@ -156,7 +161,7 @@ int CheckConnection(void)
 	{
 		// charging cap, disconnecting io pins and then measuring voltage by ADC. if there is nothing, then cap is not connected. 
 		// probably ADC will measure data from the air so this method not very applicable. 
-		CAP.adcdata[1] = 0;
+		CAP.adcdata[0] = 0;
 //		HAL_ADC_Start(&hadc1);
 		CAP_CHARGER(CHARGE);
 		HAL_Delay(500);
@@ -169,7 +174,7 @@ int CheckConnection(void)
 		HAL_GPIO_Init(charge_GPIO_Port, &GPIO_InitStruct);
 		// discharge pin is INPUT also. So there is only  cap connected to adc pin and ground.
 					
-		if (CAP.adcdata[1] >100) 
+		if (CAP.adcdata[0] > ((CAPCHARGED/100) * 30)) 
 		{ 
 		CAP_CHARGER(DISCHARGE);	
 		return 1;	

@@ -38,3 +38,4 @@ stm32_meter\transceiver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd
 stm32_meter\transceiver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 stm32_meter\transceiver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 stm32_meter\transceiver.o: ..\Program\transceiver.h
+stm32_meter\transceiver.o: E:\ProgramFiles\keil\ARM\ARMCC\Bin\..\include\stdlib.h

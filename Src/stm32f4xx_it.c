@@ -39,10 +39,11 @@
 #ifndef __vars1
 #include "defs.h"
 #include "string.h"
+#include "transceiver.h"
 #define __vars1
 #endif
 int16_t tim3cnt = 1;
-
+uint8_t sp1, sp2 = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -51,7 +52,7 @@ extern DMA_HandleTypeDef hdma_adc3;
 extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
-
+extern uint8_t receiveBufferUART5[32];
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -254,14 +255,65 @@ void UART4_IRQHandler(void)
 /**
 * @brief This function handles UART5 global interrupt.
 */
-void UART5_IRQHandler(void)
-{
-  /* USER CODE BEGIN UART5_IRQn 0 */
+	void UART5_IRQHandler(void)
+	{
+		/* USER CODE BEGIN UART5_IRQn 0 */
+	
+		    
+		
+		/*	
+			if(UART5->SR & USART_SR_RXNE)
+				 { 
+				 UART5->SR &= ~USART_SR_RXNE; 
+				 us5.receivedData[us5.startPackPos++] = UART5->DR;
+				// us5.startPackPos++;
+				 us5.newdata =1;
+						
+			 
+					 /// i know, i know! But what hal does? Why I cant type some code in interrupts? :-)
+					if (us5.receivedData[us5.startPackPos] == 0xFF) 
+						{   // startpacket is 0xFFFF  (twice 0xFF)
+							if (sp1 ==0)
+							{
+								sp1=1;
+							}		
+							else
+								{	
+									if (us5.receivedData[us5.startPackPos] == 0xFF) 
+										{
+											sp1=0;
+											us5.startPackPos = 
+											
+										}
+								}		
+
+							}		
+				if (us5.startPackPos==us5.packmaxsize) 
+					{
+						us5.startDataPos = us5.startPackPos; us5.startPackPos = 0;
+					}
+				
+				
+				return;
+						}
+						
+						*/
 
   /* USER CODE END UART5_IRQn 0 */
-  HAL_UART_IRQHandler(&huart5);
+	
+	HAL_UART_IRQHandler(&huart5);
+	
   /* USER CODE BEGIN UART5_IRQn 1 */
+	
+/*	us5.startPackPos =us5.packmaxsize-huart5.RxXferCount;  
+	us5.newdata = 1;
 
+if (us5.startPackPos > us5.packminsize) { 
+	huart5.RxXferCount = us5.packmaxsize;
+	huart5.pRxBuffPtr = 0;
+}
+	*/
+	
   /* USER CODE END UART5_IRQn 1 */
 }
 

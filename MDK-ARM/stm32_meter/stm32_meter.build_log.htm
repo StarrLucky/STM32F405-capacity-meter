@@ -21,16 +21,22 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.1.0
 Dialog DLL:      TCM.DLL V1.32.0.0
  
 <h2>Project:</h2>
-E:\Projects0\stm32F405_meterv2\MDK-ARM\stm32_meter.uvprojx
+E:\Sync\Projects0\stm32F405_meterv2\MDK-ARM\stm32_meter.uvprojx
 Project File Date:  05/17/2018
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'E:\ProgramFiles\keil\ARM\ARMCC\Bin'
 Build target 'stm32_meter'
-compiling main.c...
+compiling meter.c...
+..\Program\meter.c(83): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	  CAP.capacity = ((op_time)/
+ESISTOR_VALUE) *1000000.0;  			// uF  
+..\Program\meter.c(248): warning:  #1-D: last line of file ends without a newline
+  			
+..\Program\meter.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=24546 RO-data=634 RW-data=412 ZI-data=27436  
-"stm32_meter\stm32_meter.axf" - 0 Error(s), 0 Warning(s).
+Program Size: Code=25034 RO-data=634 RW-data=416 ZI-data=27528  
+"stm32_meter\stm32_meter.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -53,7 +59,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

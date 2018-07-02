@@ -7,7 +7,7 @@
 #define dischargePin                         discharge_Pin			//	(Reference in main.h)  pin to discharge the capacitor
 #define RESISTOR_VALUE                       10000.0					 	 // change this to resistor value you are using
 #define ADC_RESOLUTION											
-#define CAPCHARGED													 648    				//   ADC value of charged cap voltage. (ADCmax divided by 63.2% of the 3.3v).   If adc resolution is 12bit, then  CAPCHARGED  = 4096 / 2.08		= 2589,
+#define CAPCHARGED													 648    				//   ADC value of charged cap voltage. (ADCmax divided by 63.2% of the 3.3v).   If adc resolution is 12bit, then  CAPCHARGED  = 4096 / 2.08 =1969		= 2589,
 																														//  6 bit -- 40,  10 bit -- 648, 8 bit -- 162. 
 																														// Best results achieved with this settings of ADC: 8bit, prescaler div4; or  ADC 10 bit, prescaler div2
 #define MAX_CAP_CAPACITY										 0.001					//   F                                               
@@ -29,11 +29,11 @@ extern float MAX_CAP_CAPACITY_T;
 #define DISCHARGE														0
 
 
-void setup(void);
+void meter_setup(void);
 float GetCapacity(void);
 float GetCapacity2(void);
 int CheckConnection(void);
-void CAP_CHARGER(int state) ;
+void CAP_CHARGER(int state);
 
 struct cap {
 volatile  uint32_t adcdata[20];
