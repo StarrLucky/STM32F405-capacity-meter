@@ -1,4 +1,4 @@
-# STM32F405RTG6_board_CAPmeter
+# STM32F405 capacity meter
 Using t=R*C formula.
 
 UNFINISHED.
